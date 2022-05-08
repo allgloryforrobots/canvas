@@ -1,0 +1,32 @@
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+.tools {
+  height: 50px;
+  width: 100vw;
+}
+
+.editor {
+  height: calc(100% - 50px);
+  width: 100vw;
+  background-color: #ffebcd;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.area {
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
+  background-color: azure;
+}
+
+.mm {
+  height: 1mm;
+  width: 1mm;
+  display: none;
+}
+
+/*# sourceMappingURL=index.3a01df49.css.map */

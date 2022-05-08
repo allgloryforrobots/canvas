@@ -1,0 +1,37 @@
+/* body {
+    margin: 0;
+    background-image: url("1.png");
+    background-repeat: no-repeat;
+    background-position: center;
+} */
+
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
+.tools {
+    height: 50px;
+    width: 100vw;
+}
+
+.editor {
+    height: calc(100% - 50px);
+    width: 100vw;
+    background-color: blanchedalmond;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.area {
+    background-color: #F0FFFF;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+
+.mm {
+    display: none;
+    height: 1mm;
+    width: 1mm ;
+}

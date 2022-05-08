@@ -1,0 +1,17 @@
+{
+  "name": "canvas",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "source": "index.html",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.5.0"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead"
+}
