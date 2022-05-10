@@ -132,6 +132,9 @@ class CanvasManager {
 
         this.stack = [];
 
+        this.rectangles = [];
+        this.rectangles.push(new Rect(this));
+
         this.resize();
         this.init();
 
@@ -149,8 +152,8 @@ class CanvasManager {
             height: this.mmToPx * 297,
         };
 
-        this.docWidth = this.a3.width;
-        this.docHeight = this.a3.height;
+        this.docWidth = this.a3.width * this.scale;
+        this.docHeight = this.a3.height * this.scale;
 
         // помещается ли документ на экране?
         if(this.docWidth >= $(".area").width()) this.canv.width = $(".area").width();
@@ -159,6 +162,7 @@ class CanvasManager {
         if(this.docHeight >= $(".area").height()) this.canv.height = $(".area").height();
         else this.canv.height = this.docHeight;
 
+        this.paint();
     }
 
 
@@ -200,16 +204,14 @@ class CanvasManager {
     mousewheel(e) {
 
         let delta = e.originalEvent.wheelDeltaY;
-        let areaWidth = $(".area").width();
-        let areaHeight = $(".area").height();
 
         // на сколько можем скролать
-        let xInterval = this.docWidth - areaWidth;
-        let yInterval = this.docHeight - areaHeight;
+        let xInterval = this.docWidth - this.canv.width;
+        let yInterval = this.docHeight - this.canv.height;
 
         // можем ли скролать
-        let ifx = areaWidth < this.docWidth;
-        let ify = areaHeight < this.docHeight;
+        let ifx = this.canv.width < this.docWidth;
+        let ify = this.canv.height < this.docHeight;
 
         // если уперлись в границы документа, то не даем скроллать
         if(e.ctrlKey) {
@@ -260,39 +262,43 @@ class CanvasManager {
 
         this.ctx.strokeStyle = 'grey';
         this.ctx.lineWidth = 1;
-        this.ctx.strokeRect(this.scrollX, this.scrollY, 250, 250);
-        this.ctx.strokeRect(this.scrollX + 400, this.scrollY + 400, 250, 250);
+        // this.ctx.strokeRect(this.scrollX, this.scrollY, 250*this.scale, 250*this.scale);
+        // this.ctx.strokeRect(this.scrollX + 400*this.scale, this.scrollY + 400*this.scale, 250*this.scale, 250*this.scale);
 
+        for(let i of this.rectangles) {
+            this.ctx.strokeRect(
+                this.scrollX + i.x * this.scale * this.mmToPx, 
+                this.scrollY + i.y * this.scale * this.mmToPx, 
+                i.width * this.scale * this.mmToPx, 
+                i.height * this.scale * this.mmToPx
+                );
+        }
         // рассчитываем скроллбары
-        // холст
-        let areaWidth = $(".area").width();
-        let areaHeight = $(".area").height();
 
         // можем ли скролать
-        let ifx = areaWidth < this.docWidth;
-        let ify = areaHeight < this.docHeight;
+        let ifx = this.canv.width < this.docWidth - 1;
+        let ify = this.canv.height < this.docHeight - 1;
         
         // % сколько занимает скроллбар от холста
-        let xScroollRatio = areaWidth / this.docWidth;
-        let yScroollRatio = areaHeight / this.docHeight;
+        let xScroollRatio = this.canv.width / this.docWidth;
+        let yScroollRatio = this.canv.height / this.docHeight;
 
         if(ifx) {
             $(".xscroll")
             .show()
-            .css("width", areaWidth * xScroollRatio)
-            .css("left", -1 * this.scrollX / this.docWidth * areaWidth);
+            .css("width", this.canv.width * xScroollRatio)
+            .css("left", -1 * this.scrollX / this.docWidth * this.canv.width);
         }
         else $(".xscroll").hide();
 
-        if(ifx) {
+        if(ify) {
             $(".yscroll")
             .show()
-            .css("height", areaHeight * yScroollRatio)
-            .css("top", -1 * this.scrollY / this.docHeight * areaHeight);
+            .css("height", this.canv.height * yScroollRatio)
+            .css("top", -1 * this.scrollY / this.docHeight * this.canv.height);
         }
         else $(".yscroll").hide();
         
-
     };
 
 
@@ -311,8 +317,11 @@ class CanvasManager {
 class Rect {
     constructor(cm) {
         this.cm = cm;
+        // в миллиметрах значения
         this.width = 200;
         this.height = 100;
+        this.x = 0;
+        this.y = 0;
     }
 
 }
