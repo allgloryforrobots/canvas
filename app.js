@@ -152,8 +152,12 @@ class CanvasManager {
         this.docWidth = this.a3.width;
         this.docHeight = this.a3.height;
 
-        this.canv.width = $(".area").width();
-        this.canv.height = $(".area").height();
+        // помещается ли документ на экране?
+        if(this.docWidth >= $(".area").width()) this.canv.width = $(".area").width();
+        else this.canv.width = this.docWidth;
+
+        if(this.docHeight >= $(".area").height()) this.canv.height = $(".area").height();
+        else this.canv.height = this.docHeight;
 
     }
 
@@ -191,34 +195,72 @@ class CanvasManager {
         this.ctx.strokeStyle = 'grey';
         this.ctx.lineWidth = 1;
         this.ctx.strokeRect(this.scrollX, this.scrollY, 250, 250);
+        this.ctx.strokeRect(this.scrollX + 400, this.scrollY + 400, 250, 250);
 
     }
 
 
     mousewheel(e) {
 
-        let dy = e.originalEvent.wheelDeltaY;
-        let dx = e.originalEvent.wheelDeltaX;
-        let aw = $(".area").width();
-        let ah = $(".area").height();
+        let delta = e.originalEvent.wheelDeltaY;
+        let areaWidth = $(".area").width();
+        let areaHeight = $(".area").height();
 
+        // на сколько можем скролать
+        let xInterval = this.docWidth - areaWidth;
+        let yInterval = this.docHeight - areaHeight;
+
+        // можем ли скролать
+        let ifx = areaWidth < this.docWidth;
+        let ify = areaHeight < this.docHeight;
+
+        console.log("ify", ify);
+
+        // console.log("e.ctrlKey", e.ctrlKey)
+        // console.log("this.scrollX", this.scrollX)
+        console.log("this.scrollY", this.scrollY)
+        // console.log("aw", aw)
+        console.log("areaHeight", areaHeight)
+        console.log("delta", delta)
+        console.log("this.docWidth", this.docWidth)
+        // console.log("this.docHeight", this.docHeight)
 
         // если уперлись в границы документа, то не даем скроллать
         if(e.ctrlKey) {
 
             // документ поместился на экране без прокрутки
-            if(this.docWidth <= aw) return;
-            
+            if(!ifx) return;
 
-            if(this.scrollX + dy >= this.docWidth) this.scrollX = ;
-            else this.scrollX += dy;
+            if(delta > 0) {
+                // контент уходит влево (положительная координата не может быть, уперлись в край)
+                if( this.scrollX += delta > 0) this.scrollX = 0;
+                else this.scrollX += delta;
+
+            }
+            else {
+                // контент уходит вправо (отрицательная координата)
+                if( Math.abs(this.scrollX += delta) > xInterval) this.scrollX = -1 * xInterval;
+                else this.scrollX += delta;
+            }
+
         }
         else {
-            // документ поместился на экране без прокрутки
-            if(this.docHeight <= aw) return;
 
-            if() this.scrollY = ;
-            else this.scrollY += dy;
+            // документ поместился на экране без прокрутки
+            if(!ify) return;
+
+            if(delta > 0) {
+                // контент уходит вниз (положительная координата не может быть, уперлись в край)
+                if( this.scrollY += delta > 0) this.scrollY = 0;
+                else this.scrollY += delta;
+
+            }
+            else {
+                // контент уходит вверх (отрицательная координата)
+                if( Math.abs(this.scrollY += delta) > yInterval) this.scrollY = -1 * yInterval;
+                else this.scrollY += delta;
+            }
+
         }
 
         this.paint();
@@ -233,6 +275,7 @@ class CanvasManager {
         this.ctx.strokeStyle = 'grey';
         this.ctx.lineWidth = 1;
         this.ctx.strokeRect(this.scrollX, this.scrollY, 250, 250);
+        this.ctx.strokeRect(this.scrollX + 400, this.scrollY + 400, 250, 250);
 
     };
 
