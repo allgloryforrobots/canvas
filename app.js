@@ -133,12 +133,13 @@ class CanvasManager {
         this.stack = [];
 
         this.resize();
-
         this.init();
+
     }
     
 
     resize() {
+
         // сколько пикселей в 1мм
         this.mmToPx = $(".mm").height();
 
@@ -153,6 +154,7 @@ class CanvasManager {
 
         this.canv.width = $(".area").width();
         this.canv.height = $(".area").height();
+
     }
 
 
@@ -183,38 +185,69 @@ class CanvasManager {
 
         $(this.canv).on("mousewheel", (e) => {
             e.preventDefault();
-
-            if(e.ctrlKey) {
-                this.scrollX += e.originalEvent.wheelDeltaY;
-            }
-            else {
-                this.scrollY += e.originalEvent.wheelDeltaY;
-            }
-
-            this.paint();
+            this.mousewheel(e);
         });
-
 
         this.ctx.strokeStyle = 'grey';
         this.ctx.lineWidth = 1;
         this.ctx.strokeRect(this.scrollX, this.scrollY, 250, 250);
+
     }
 
+
+    mousewheel(e) {
+
+        let dy = e.originalEvent.wheelDeltaY;
+        let dx = e.originalEvent.wheelDeltaX;
+        let aw = $(".area").width();
+        let ah = $(".area").height();
+
+
+        // если уперлись в границы документа, то не даем скроллать
+        if(e.ctrlKey) {
+
+            // документ поместился на экране без прокрутки
+            if(this.docWidth <= aw) return;
+            
+
+            if(this.scrollX + dy >= this.docWidth) this.scrollX = ;
+            else this.scrollX += dy;
+        }
+        else {
+            // документ поместился на экране без прокрутки
+            if(this.docHeight <= aw) return;
+
+            if() this.scrollY = ;
+            else this.scrollY += dy;
+        }
+
+        this.paint();
+
+    }
+
+
     paint() {
+
         this.clear();
 
         this.ctx.strokeStyle = 'grey';
         this.ctx.lineWidth = 1;
         this.ctx.strokeRect(this.scrollX, this.scrollY, 250, 250);
+
     };
 
+
     clear() {
+
         this.ctx.fillStyle = 'white';
         this.ctx.fillRect(0, 0, this.canv.width, this.canv.height);
         this.ctx.beginPath();
         this.ctx.fillStyle = 'black';
+
     }
+
 }
+
 
 class Rect {
     constructor(cm) {

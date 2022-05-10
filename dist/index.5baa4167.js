@@ -668,13 +668,18 @@ class CanvasManager {
         });
         $(this.canv).on("mousewheel", (e)=>{
             e.preventDefault();
-            if (e.ctrlKey) this.scrollX += e.originalEvent.wheelDeltaY;
-            else this.scrollY += e.originalEvent.wheelDeltaY;
-            this.paint();
+            this.mousewheel(e);
         });
         this.ctx.strokeStyle = 'grey';
         this.ctx.lineWidth = 1;
         this.ctx.strokeRect(this.scrollX, this.scrollY, 250, 250);
+    }
+    mousewheel(e) {
+        // если уперлись в границы документа, то не даем скроллать
+        if (e.ctrlKey) {
+            if (this.scrollX) this.scrollX += e.originalEvent.wheelDeltaY;
+        } else this.scrollY += e.originalEvent.wheelDeltaY;
+        this.paint();
     }
     paint() {
         this.clear();
