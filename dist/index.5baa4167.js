@@ -673,10 +673,7 @@ class CanvasManager {
             e.preventDefault();
             this.mousewheel(e);
         });
-        this.ctx.strokeStyle = 'grey';
-        this.ctx.lineWidth = 1;
-        this.ctx.strokeRect(this.scrollX, this.scrollY, 250, 250);
-        this.ctx.strokeRect(this.scrollX + 400, this.scrollY + 400, 250, 250);
+        this.paint();
     }
     mousewheel(e) {
         let delta = e.originalEvent.wheelDeltaY;
@@ -688,15 +685,6 @@ class CanvasManager {
         // можем ли скролать
         let ifx = areaWidth < this.docWidth;
         let ify = areaHeight < this.docHeight;
-        console.log("ify", ify);
-        // console.log("e.ctrlKey", e.ctrlKey)
-        // console.log("this.scrollX", this.scrollX)
-        console.log("this.scrollY", this.scrollY);
-        // console.log("aw", aw)
-        console.log("areaHeight", areaHeight);
-        console.log("delta", delta);
-        console.log("this.docWidth", this.docWidth);
-        // console.log("this.docHeight", this.docHeight)
         // если уперлись в границы документа, то не даем скроллать
         if (e.ctrlKey) {
             // документ поместился на экране без прокрутки
@@ -727,6 +715,20 @@ class CanvasManager {
         this.ctx.lineWidth = 1;
         this.ctx.strokeRect(this.scrollX, this.scrollY, 250, 250);
         this.ctx.strokeRect(this.scrollX + 400, this.scrollY + 400, 250, 250);
+        // рассчитываем скроллбары
+        // холст
+        let areaWidth = $(".area").width();
+        let areaHeight = $(".area").height();
+        // можем ли скролать
+        let ifx = areaWidth < this.docWidth;
+        let ify = areaHeight < this.docHeight;
+        // % сколько занимает скроллбар от холста
+        let xScroollRatio = areaWidth / this.docWidth;
+        let yScroollRatio = areaHeight / this.docHeight;
+        if (ifx) $(".xscroll").show().css("width", areaWidth * xScroollRatio).css("left", -1 * this.scrollX / this.docWidth * areaWidth);
+        else $(".xscroll").hide();
+        if (ifx) $(".yscroll").show().css("height", areaHeight * yScroollRatio).css("top", -1 * this.scrollY / this.docHeight * areaHeight);
+        else $(".yscroll").hide();
     }
     clear() {
         this.ctx.fillStyle = 'white';

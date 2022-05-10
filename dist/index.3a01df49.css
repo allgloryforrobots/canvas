@@ -21,6 +21,23 @@ body {
   height: calc(100% - 20px);
   width: calc(100% - 20px);
   background-color: azure;
+  position: relative;
+}
+
+.area .xscroll {
+  height: 10px;
+  background: silver;
+  border-radius: 5px;
+  position: absolute;
+  bottom: -10px;
+}
+
+.area .yscroll {
+  width: 10px;
+  background: silver;
+  border-radius: 5px;
+  position: absolute;
+  right: -10px;
 }
 
 .mm {

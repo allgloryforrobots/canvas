@@ -28,6 +28,23 @@ body {
     background-color: #F0FFFF;
     height: calc(100% - 20px);
     width: calc(100% - 20px);
+    position: relative;
+}
+
+.area .xscroll {
+    position: absolute;
+    background: silver;
+    border-radius: 5px;
+    height: 10px;
+    bottom: -10px;
+}
+
+.area .yscroll {
+    position: absolute;
+    background: silver;
+    border-radius: 5px;
+    width: 10px;
+    right: -10px;
 }
 
 .mm {
